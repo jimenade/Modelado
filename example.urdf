@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<robot name="example">
+
+  <!-- Necesario para fijar la base -->
+    <link name="world"/>
+
+    <!-- Base -->
+    <link name="base_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0.1" />
+            <mass value="10.0" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                     iyy="1.0" iyz="0.0" izz="1.0" />
+
+        </inertial>
+        <visual>        
+            <origin rpy="0 0 0" xyz="0 0 0.1" />
+            <geometry>
+                <box size="0.4 0.4 0.2" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.1" />
+            <geometry>
+             <box size="0.4 0.4 0.2" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Fijamos base al mundo -->
+    <joint name="fixed" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin xyz="0 0 0"/>
+    </joint>
+
+    <!-- Link vertical -->
+    <link name="vertical_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0.3" /> <!-- Centro en la mitad de la base -->
+            <mass value="3.0" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                     iyy="1.0" iyz="0.0" izz="1.0" />
+
+        </inertial>
+        <visual>        
+            <origin rpy="0 0 0" xyz="0 0 0.3" />
+            <geometry>
+                <box size="0.1 0.1 0.6" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.3" />
+            <geometry>
+             <box size="0.1 0.1 0.6" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Articulacion base-link vertical -->
+    <joint name="base_to_vertical" type="continuous">
+        <parent link="base_link" />
+        <child link="vertical_link" />
+        <!-- <dynamics damping="0.0" friction="0.00001" /> -->
+        <origin xyz="0 0 0.2"/> <!-- Alineado con parte superior base -->
+        <axis xyz="1 0 0" />
+        <limit lower="-0.14" upper="0.14" effort="10.0" velocity="0.5" />
+    </joint>
+
+    <!-- Link horizontal -->
+    <link name="horizontal_link">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0.15 0.15" />
+            <mass value="1.0" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                     iyy="1.0" iyz="0.0" izz="1.0" />
+
+        </inertial>
+        <visual>        
+            <origin rpy="0 0 0" xyz="0 0.15 0.15" />
+            <geometry>
+                <box size="0.1 0.4 0.1" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0.15 0.15" />
+            <geometry>
+             <box size="0.1 0.4 0.1" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Articualcion links vertical - horizontal -->
+    <joint name="vertical_to_horizontal" type="continuous">
+        <parent link="vertical_link" />
+        <child link="horizontal_link" />
+        <dynamics damping="1.0" friction="0.00001" />
+        <origin xyz="0 0 0.5"/> <!-////- Parte superior link vertical -->
+        <axis xyz="0 0 1" />
+        <limit lower="-0.14" upper="0.14" effort="10.0" velocity="0.5" />
+    </joint> 
+
+    <!-- Material -->
+    <material name="blue">
+        <color rgba="0 0 0.8 1" />
+    </material>
+
+
+</robot>
+
+<!-- <?xml version="1.0"?>
+
+<robot name="example">
+
+     IMPORTANTE, los tamaños de los links siempre van referenciados desde el centroide
+
+      Fijate, la base comienza en el (0,0,0) y tiene 0.2 de altura, por tanto 
+     sabemos que esta caja estará entre -0.1 y 0.1 (ya que comienza desde el centroide)
+      
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 0.1" />
+            <geometry>
+                <box size="0.4 0.4 0.2" />
+            </geometry>
+        </visual>
+
+    </link>
+</robot> -->
